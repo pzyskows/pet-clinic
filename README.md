@@ -32,6 +32,35 @@ Open http://localhost:8081/?name=Muley&amount=20000&term=48&ssn=1234 in your bro
 In your browser's address bar, replace query parameters and press enter for a new response from the application. 
 
 Create customer loan profile:
+Send sample HTTP POST request to http://localhost:8081/:  
+{  
+    "name": "John FLetcher",  
+    "ssn": "123456789",  
+    "amount": "10000",  
+    "term": "10",  
+    "banks": [1],  
+    "requestedDate": "2018-12-12"  
+}  
+
+Replace customer loan profile:
+Send sample HTTP PUT request to http://localhost:8081/{SSN}:  
+{  
+    "name": "John FLetcher",  
+    "ssn": "123456789",  
+    "amount": "10000",  
+    "term": "10",  
+    "banks": [1],  
+    "requestedDate": "2018-12-12"  
+}
+
+Delete customer loan profile:
+Send HTTP DELETE request to http://localhost:8081/{SSN}
+
+# Choice Router and Foreach references
+- For more information on routing messages, see [Choice Router](https://docs.mulesoft.com/mule4-user-guide/v/4.1/choice-router-concept).
+- For more information on iterative processing, see [Foreach Scope](https://docs.mulesoft.com/mule4-user-guide/v/4.1/for-each-scope-concept).
+
+Create customer loan profile:
 Send sample HTTP POST request to http://localhost:8081/:
 {
     "name": "John FLetcher",
