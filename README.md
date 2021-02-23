@@ -1,90 +1,57 @@
-# Spring PetClinic Application
-
-This repository is a fork of the [spring-petclinic/spring-framework-petclinic](https://github.com/spring-petclinic/spring-framework-petclinic).
-
-This application is used by [Online DevOps Dojo](https://github.com/dxc-technology/online-devops-dojo) to illustrate the DevOps practices.
-Customization and vulnerabilities have been added for training purpose. If you wish to use the PetClinic application, please fork the [original repository](https://github.com/spring-projects/spring-petclinic).
-
-<img width="1042" alt="petclinic-screenshot" src="https://cloud.githubusercontent.com/assets/838318/19727082/2aee6d6c-9b8e-11e6-81fe-e889a5ddfded.png">
-
 # Introduction 
-This Mule example application demonstrates the use of content-based routing and for each data processing.
-The application provides information about possible loans from banks.
-It is possible to send customer loan profile creation/replacement and deletion requests, via mocked banks API.
+This Mule example application demonstrates interface created with APIkit, Anypoint Studio's tooling for building REST APIs with RAML interfaces. 
+The application takes a RAML file and maps it to an implementation of an API. This example implementation routes the request according the method which was used (GET, POST, PUT, DELETE) and generates a dummy message.
 
 # How it works
-The application exposes a service that can be used to ask for possible loan offers from banks. Secondary mocked API (GET/customerprofile endpoint) is queried for the loan propositions and then the final answer is composed, containing:
-- name of the customer
-- loan amount
-- SNN
-- loan term
-
-Responses from banks are randomized, including 1, 2 or 3 answers.
-
-Customer loan profile creation/replacement and deletion requests result in a success message from the mocked API, stating that request was processed.
+Application is focused on implementing an API definition, which is based on the RAML API specification that you can find in the src/main/resources/api folder of the project.
+It uses the APIKit Router component to route requests to the proper flows. There are five different flows, one for GET, PUT, and DELETE requests with an uri parameter and POST, GET requests without uri parameter. The flow then generates a dummy return message.
 
 # Build and Test
 Follow the procedure below to create, then run the application in Mule ESB.
 Open the Example project in Anypoint Studio. In the Package Explorer panel in Studio, right-click the project name, then select Run As > Mule Application.
 
-Get loan offers for a customer:
-Open http://localhost:8081/?name=Muley&amount=20000&term=48&ssn=1234 in your browser to get a response from the application. 
-In your browser's address bar, replace query parameters and press enter for a new response from the application. 
+Get loan offers for multiple customers:  
+Open http://localhost:8081/customerprofile in your browser to get a response from the application. 
+Sample reply is returned, including:
+- customer name
+- ssn
+- loan amount
+- loan currency
+- term
+- payments
+- bank
+- request date
 
 Create customer loan profile:
-Send sample HTTP POST request to http://localhost:8081/:  
+Send sample HTTP POST request to http://localhost:8081/customerprofile:  
 {  
-    "name": "John FLetcher",  
-    "ssn": "123456789",  
-    "amount": "10000",  
-    "term": "10",  
-    "banks": [1],  
-    "requestedDate": "2018-12-12"  
+	"name": "John FLetcher",  
+	"ssn": "123456789",  
+	"amount": 10000,  
+	"currency": "EUR",  
+	"term": 10,  
+	"bank": "1",  
+	"requestedDate": "2018-12-12"  
 }  
 
+Get loan offers for a single customer:
+Open http://localhost:8081/customerprofile/1234 in your browser to get a response from the application. 
+Sample reply is returned, containing same type of data as in the case of GET request for multiple customers.
+
 Replace customer loan profile:
-Send sample HTTP PUT request to http://localhost:8081/{SSN}:  
+Send sample HTTP PUT request to http://localhost:8081/customerprofile/{SSN}:   
 {  
-    "name": "John FLetcher",  
-    "ssn": "123456789",  
-    "amount": "10000",  
-    "term": "10",  
-    "banks": [1],  
-    "requestedDate": "2018-12-12"  
-}
+	"name": "John FLetcher",  
+	"ssn": "123456789",  
+	"amount": 10000,  
+	"currency": "EUR",  
+	"term": 10,  
+	"bank": "1",  
+	"requestedDate": "2018-12-12"  
+}  
 
 Delete customer loan profile:
-Send HTTP DELETE request to http://localhost:8081/{SSN}
+Send HTTP DELETE request to http://localhost:8081/customerprofile/{SSN}
 
-# Choice Router and Foreach references
-- For more information on routing messages, see [Choice Router](https://docs.mulesoft.com/mule4-user-guide/v/4.1/choice-router-concept).
-- For more information on iterative processing, see [Foreach Scope](https://docs.mulesoft.com/mule4-user-guide/v/4.1/for-each-scope-concept).
-
-Create customer loan profile:
-Send sample HTTP POST request to http://localhost:8081/:
-{
-    "name": "John FLetcher",
-    "ssn": "123456789",
-    "amount": "10000",
-    "term": "10",
-    "banks": [1],
-    "requestedDate": "2018-12-12"
-}
-
-Replace customer loan profile:
-Send sample HTTP PUT request to http://localhost:8081/{SSN}:
-{
-    "name": "John FLetcher",
-    "ssn": "123456789",
-    "amount": "10000",
-    "term": "10",
-    "banks": [1],
-    "requestedDate": "2018-12-12"
-}
-
-Delete customer loan profile:
-Send HTTP DELETE request to http://localhost:8081/{SSN}
-
-# Choice Router and Foreach references
-- For more information on routing messages, see [Choice Router](https://docs.mulesoft.com/mule4-user-guide/v/4.1/choice-router-concept).
-- For more information on iterative processing, see [Foreach Scope](https://docs.mulesoft.com/mule4-user-guide/v/4.1/for-each-scope-concept).
+# Encrypted properties
+Sensitive configuration data, like passwords are encrypted using MuleSoft Secure Properties module. 
